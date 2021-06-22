@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+       *{
+       margin:0px;
+       }
+     .container{
+      padding-top: 24px;
+      font-family: 'Montserrat', sans-serif;
+      max-width:1000px;
+      padding:10px 3rem;
+      text-align: -webkit-auto;
+    }
+    h5
+    {
+    text-align:center;
+    }
+    .center {
+    margin: auto;
+    width: 10%;
+    padding: 10px;
+    }
+    .table-responsive {
+    display: inline;
+    width: 100%;
+    overflow-x: auto;
+    }
+    .h1, h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    }
+    #search-box{
+    border-radius:40px;
+    background-color:#bbd5db;
+    }
+    {% comment %} .table-bordered td, .table-bordered th {
+    border: 1px solid black;
+    } {% endcomment %}
+    #table-result{
+    border-radius:40px;
+    background-color:#f7f7f763;
+    }
+}
+</style>
+<head>
+    <title></title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("#btnPrint").live("click", function () {
+            var divContents = $("#dvContainer").html();
+            var divToPrint=document.getElementById("Table");
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write(divContents);
+            printWindow.document.close();
+            printWindow.print();
+        });
+    </script>
+</head>
+
+<!--    Navs End     -->
+<div class="container" style="margin-bottom:0px;">
+    {% if messages %}
+    {% for message in messages %}
+    <div style="text-align:center;" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+<div class="container mt-2 pt-5 px-5 py-1 mb-1" id="search-box">
+    <p class="h1 mx-auto" style="width:200px">Search</p>
+    <form method="GET" action="/calendar/report/">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col"><label for="key1">Enter Due Date</label>
+                <input type="date" id="key1" name="key1" class="form-control">
+            </div>
+            <div class="col"><label for="key2">Enter the detail</label>
+                <input type="text" id="key2" name="key2" class="form-control"
+                       placeholder="Enter ID/Regulator/Frequency/Financial Year">
+            </div>
+        </div>
+        <p class="mx-auto mt-4 h2" style="width: 80px;">OR</p>
+        <div class="row mt-2">
+            <div class="col"><label for="start_date">Start Date</label>
+                <input type="date" id="start_date" name="start_date" class="form-control">
+            </div>
+            <div class="col"><label for="end_date">End Date</label>
+                <input type="date" id="end_date" name="end_date" class="form-control">
+            </div>
+        </div>
+        <div class="center mt-3" >
+            <input type="submit" class="btn btn-group btn-lg btn-primary" value="Search" style="margin:center;"></div>
+    </form>
+</div>
+<div class="d-flex justify-content-center mt-5">
+    <a href="{% url 'calendar' %}"><button class="btn btn-warning">Go back to Calendar</button></a>
+</div>
+<form id="form1">
+    <div id="dvContainer" class="mt-5 mb-5">
+
+        {% if mfind %}
+
+        <div class="px-5 py-1 mt-3" id="table-result">
+            <div class="mx-auto my-3" style="width: 400px;">
+                <p class="h1"> Search Result
+                <a class="fa  fa-print" id="btnPrint"></a>
+                </p>
+            </div>
+
+            <table class="table table-bordered table-hover table-responsive" border="1" cellpadding="5px" id="Table">
+                <thead class="thead-dark">
+                <tr>
+                    {% for m in mfind|slice:":1" %}
+                    <th scope="col">ID</th>
+                    <th scope="col">Regulator</th>
+                    <th scope="col">Financial Year</th>
+                    <th scope="col">Assessment Year</th>
+                    <th scope="col">Date_of_Entry</th>
+                    <th scope="col">Form Return</th>
+                    <th scope="col">Frequency</th>
+                    <th scope="col">Type of Tax Payer</th>
+                    <th scope="col">Actual_Due Date</th>
+                    <th scope="col">Latest_Due Date</th>
+                    <th scope="col">Description</th>
+                    {% if m.due_date_1 != null and m.due_date_1 != "NULL" %}
+                    <th scope="col">Due_Date_1</th>
+                    <th scope="col">Due Date 1 Remarks</th>
+                    {% endif %}
+                    {% if m.due_date_2 != null and m.due_date_2 != "null"  %}
+                    <th scope="col">Due_Date_2</th>
+                    <th scope="col">Due Date 2 Remarks</th>
+                    {% endif %}
+                    {% if m.due_date_3 != null and m.due_date_3 != "null"  %}
+                    <th scope="col">Due_Date_3</th>
+                    <th scope="col">Due Date 3 Remarks</th>
+                    {% endif %}
+                    {% if m.due_date_4 != null and m.due_date_4 != "null"  %}
+                    <th scope="col">Due_Date_4</th>
+                    <th scope="col">Due Date 4 Remarks</th>
+                    {% endif %}
+                    {% if m.due_date_5 != null and m.due_date_5 != "null"  %}
+                    <th scope="col">Due_Date_5</th>
+                    <th scope="col">Due Date 5 Remarks</th>
+                    {% endif %}
+                </tr>
+                {{ break }}
+                {% endfor %}
+                </thead>
+                <tbody>
+                {% for m in mfind %}
+                <tr>
+                    <th scope="col">{{m.id}}</th>
+                    <th scope="col">{{m.regulator}}</th>
+                    <th scope="col">{{m.financial_year}}</th>
+                    <th scope="col">{{m.assessment_year}}</th>
+                    <th scope="col">{{m.date_of_entry|date:'Y-m-d'}}</th>
+                    <th scope="col">{{m.form_return}}</th>
+                    <th scope="col">{{m.frequency}}</th>
+                    <th scope="col">{{m.type_of_tax_payer}}</th>
+                    <th scope="col">{{m.actual_due_date|date:'Y-m-d'}}</th>
+                    <th scope="col">{{m.latest_due_date}}</th>
+                    <th scope="col">{{m.Description}}</th>
+                    {% if m.due_date_1 != null and m.due_date_1 != "null" %}
+                    <th scope="col">{{m.due_date_1}}</th>
+                    <th scope="col">{{m.due_date_1_remarks}}</th>
+                    {% endif %}
+                    {% if m.due_date_2 != null  and m.due_date_2 != "null" %}
+                    <th scope="col">{{m.due_date_2}}</th>
+                    <th scope="col">{{m.due_date_2_remarks}}</th>
+                    {% endif %}
+                    {% if m.due_date_3 != null and m.due_date_3 != "null" %}
+                    <th scope="col">{{m.due_date_3}}</th>
+                    <th scope="col">{{m.due_date_3_remarks}}</th>
+                    {% endif %}
+                    {% if m.due_date_4 != null  and m.due_date_4 != "null" %}
+                    <th scope="col">{{m.due_date_4}}</th>
+                    <th scope="col">{{m.due_date_4_remarks}}</th>
+                    {% endif %}
+                    {% if m.due_date_5 != null  and m.due_date_5 != "null" %}
+                    <th scope="col">{{m.due_date_5}}</th>
+                    <th scope="col">{{m.due_date_5_remarks}}</th>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</form>
+{% endif %}
+{% endblock %}

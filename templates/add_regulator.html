@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content%}
+
+{% load static %}
+
+<title>Add  Task</title>
+<link href="{% static 'style_main.css' %}" rel="stylesheet">
+
+<body>
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div style="text-align:center;" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+<div class="wrapper">
+    <div class="title">
+        Add Regulator
+    </div>
+    <form action="{% url 'add_regulator' %}" method="POST">
+        {% csrf_token %}
+        <div class="form">
+            <div class="inputfield">
+                <label>Regulator</label>
+                <input type="text" class="input" name="regulator">
+            </div>
+            <div class="inputfield">
+                <label>Color Palette</label>
+                <input type="color" id="head" name="color_palette" value="#e66465">
+            </div>
+            <div class="inputfield">
+                <input type="submit" value="Add" class="btn">
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+{% endblock %}

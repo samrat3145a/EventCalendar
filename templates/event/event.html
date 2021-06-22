@@ -1,0 +1,296 @@
+{% extends 'base.html' %} {% block content%} {% load static %}
+<style>
+  .btn1 {
+    width: 30%;
+    margin: auto;
+    padding: 8px 10px;
+    font-size: 15px;
+    border: 0px;
+    background: #28b0d8e0;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 25px;
+    outline: none;
+  }
+  .myTabContent {
+    background-color: pink;
+  }
+  .container {
+    padding-top: 24px;
+    font-family: "Montserrat", sans-serif;
+    max-width: 1000px;
+    padding: 10px 3rem;
+    text-align: -webkit-auto;
+  }
+  h5 {
+    text-align: center;
+  }
+</style>
+<title>Home</title>
+<link href="{% static 'style_main.css' %}" rel="stylesheet" />
+<body onclick="function1();">
+  <div class="tab-content mb-5" id="myTabContent">
+    <!--    Navs Start     -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb pl-5">
+        <li class="breadcrumb-item">
+          <a href="{% url 'home' %}">Create New Event</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'view_query_event' %}">View Event</a>
+        </li>
+      </ol>
+    </nav>
+    <!--    Navs End     -->
+    <div class="container" style="padding-top: 0px">
+      {% if messages %} {% for message in messages %}
+      <div
+        style="text-align: center"
+        class="alert alert-warning alert-dismissible fade show"
+        role="alert"
+      >
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %}
+    </div>
+
+    <div
+      class="wrapper"
+      style="
+        background-color: #2196f3;
+        border-radius: 25px 25px 0px 0px;
+        color: white;
+        margin: 0px auto;
+        margin-top: 50px;
+      "
+    >
+      <h2 class="pl-5 pt-2">Form</h2>
+    </div>
+
+    <div
+      class="wrapper"
+      style="
+        background-color: #eceff1;
+        border-radius: 0px 0px 25px 25px;
+        margin: 0px auto;
+      "
+    >
+      <form class="needs-validation" method="POST" novalidate>
+        {% csrf_token %}
+        <div class="form">
+          <div class="inputfield">
+            <label for="regulator">Regulator</label>
+            <div class="custom_select">
+              <select name="regulator" id="regulator" class="form-control">
+                <option value="">Select Regulator</option>
+                {% for i in regulator_data %}
+                <option value="{{ i.regulator }}">{{ i.regulator }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div style="padding-left: 6px">
+              <a href="{% url 'add_regulator' %}"><i class="fa fa-plus"></i></a>
+            </div>
+          </div>
+          <p style="padding-left: 155px">
+            <small>Click + to add new Regulator</small>
+          </p>
+          <div class="inputfield">
+            <label for="financial_year">Financial Year</label>
+            <input
+              type="text"
+              class="form-control"
+              onchange="myFunction1()"
+              id="financial_year"
+              required
+              name="financial_year"
+              placeholder="Enter Financial Year"
+              autocomplete="off"
+            />
+          </div>
+          <div class="inputfield">
+            <label for="assessment_year">Assessment Year</label>
+            <input
+              type="text"
+              class="form-control"
+              onchange="myFunction2()"
+              id="assessment_year"
+              required
+              name="assessment_year"
+              placeholder="Enter Assessment Year"
+              autocomplete="off"
+            />
+          </div>
+          <div class="inputfield">
+            <label for="period_from" style="margin-right: 60px">Period:-</label>
+            <label for="period_from">From</label>
+            <input
+              type="date"
+              class="form-control"
+              id="period_from"
+              required
+              name="period_from"
+            />
+            <label for="period_to" style="margin-left: 25px; margin-right: 5px"
+              >To</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="period_to"
+              required
+              name="period_to"
+            />
+          </div>
+          <div class="inputfield">
+            <label for="form_return">Form/Return</label>
+            <div class="custom_select">
+              <select
+                name="form_return"
+                id="form_return"
+                required
+                class="form-control"
+              >
+                <option value="">Select Form/Return</option>
+                {% for i in form_return_data %}
+                <option value="{{ i.form_return }}">{{ i.form_return }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div style="padding-left: 6px">
+              <a href="{% url 'add_form_return' %}"
+                ><i class="fa fa-plus"></i
+              ></a>
+            </div>
+          </div>
+          <p style="padding-left: 155px">
+            <small>Click + to add Frequency</small>
+          </p>
+          <div class="inputfield">
+            <label for="frequency">Frequency</label>
+            <div class="custom_select">
+              <select
+                name="frequency"
+                id="frequency"
+                required
+                class="form-control"
+              >
+                <option value="">Select Frequency</option>
+                {% for i in frequency_data %}
+                <option value="{{ i.frequency }}">{{ i.frequency }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div style="padding-left: 6px">
+              <a href="{% url 'add_frequency' %}"><i class="fa fa-plus"></i></a>
+            </div>
+          </div>
+          <p style="padding-left: 155px">
+            <small>Click + to add Frequency</small>
+          </p>
+          <div class="inputfield">
+            <label for="type_of_tax_payer">Type of Tax payer</label>
+            <div class="custom_select">
+              <select
+                name="type_of_tax_payer"
+                id="type_of_tax_payer"
+                required
+                class="form-control"
+              >
+                <option value="">Select Tax Payer</option>
+                {% for i in taxPayer_data %}
+                <option value="{{ i.tax_payer }}">{{ i.tax_payer }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div style="padding-left: 6px">
+              <a href="{% url 'add_tax_payer' %}"><i class="fa fa-plus"></i></a>
+            </div>
+          </div>
+          <p style="padding-left: 155px">
+            <small>Click + to add Type of Tax Payer</small>
+          </p>
+          <div class="inputfield">
+            <label for="actual_due_date">Actual Due Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="actual_due_date"
+              required
+              name="actual_due_date"
+            />
+          </div>
+          <div class="inputfield">
+            <label for="Description">Description</label>
+            <input
+              type="text"
+              class="form-control"
+              id="Description"
+              name="Description"
+              required
+              placeholder="Enter description"
+            />
+          </div>
+          <div class="inputfield">
+          <input type="text" class="form-control" name="latest_due_date" id="latest_due_date" readonly hidden>
+            <input type="submit" value="Submit" class="btn1" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+<script>
+  (function () {
+    "use strict";
+    window.addEventListener(
+      "load",
+      function () {
+        var forms = document.getElementsByClassName("needs-validation");
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      },
+      false
+    );
+  })();
+  function function1(){
+    var a=document.getElementById("actual_due_date").value;
+    document.getElementById("latest_due_date").value = a;
+    console.log(a);
+  }
+  function myFunction1() {
+    var a = String(document.getElementById("financial_year").value);
+    var b = String(
+      parseInt(document.getElementById("financial_year").value % 100) + 1
+    );
+    document.getElementById("financial_year").value = a + "-" + b;
+  }
+  function myFunction2() {
+    var a = String(document.getElementById("assessment_year").value);
+    var b = String(
+      parseInt(document.getElementById("assessment_year").value % 100) + 1
+    );
+    document.getElementById("assessment_year").value = a + "-" + b;
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+     .container{
+      padding-top: 24px;
+      font-family: 'Montserrat', sans-serif;
+      max-width:1000px;
+      padding:10px 3rem;
+      text-align: -webkit-auto;
+    }
+    h5
+    {
+    text-align:center;
+    }
+    .center {
+    margin: auto;
+    width: 10%;
+    padding: 10px;
+    }
+</style>
+<body>
+    <!--    Navs     -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb pl-5">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Create New Entry</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'view_query_event' %}">View Entry</a></li>
+        </ol>
+    </nav>
+    <!--    Navs End     -->
+    <div class="container" style="padding-top:0px;">
+        {% if messages %}
+        {% for message in messages %}
+        <div style="text-align:center;" class="alert alert-warning alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="container py-3 mt-5" style="background-color:#2196f3 ; border-radius: 25px 25px 0px 0px; color: white;">
+        <h2 class="pl-5 pt-2">View Event</h2>
+    </div>
+
+    <div class="container p-5 mb-5" style="background-color:#eceff1; border-radius: 0px 0px 25px 25px;">
+        <h2>Search</h2>
+        <form method="GET" action="/calendar/result/">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col"><label for="name">Enter Due Date</label>
+                    <input type="date" id="name" name="key1" class="form-control">
+                </div>
+                <div class="col"><label for="ID">Enter the detail</label>
+                    <input type="text" id="ID" name="key2" class="form-control"
+                        placeholder="Enter ID/Regulator/Frequency/Financial Year/Form-Return">
+                </div>
+            </div>
+            <div class="center mt-4">
+                <input type="submit" class="btn btn-group btn-lg btn-primary" value="Search" style="margin:center;"></div>
+        </form>
+    </div>
+    {% if mfind %}
+    <div class="container p-5 mt-3" style="background-color:#eceff1; border-radius: 25px;">
+        <h2>Search Result</h2>
+        <table class="table table-bordered table-hover table-responsive" border="1" cellpadding="5px" id="Table">
+                <thead class="thead-dark">
+                <tr>
+                    {% for m in mfind|slice:":1" %}
+                    {% if user.is_superuser %}
+                    <th scope="col">Options</th>
+                    {% endif %}
+                    <th scope="col">ID</th>
+                    <th scope="col">Regulator</th>
+                    <th scope="col">Financial Year</th>
+                    <th scope="col">Assessment Year</th>
+                    <th scope="col">Date_of_Entry</th>
+                    <th scope="col">Form Return</th>
+                    <th scope="col">Frequency</th>
+                    <th scope="col">Type of Tax Payer</th>
+                    <th scope="col">Actual_Due Date</th>
+                    <th scope="col">Latest_Due Date</th>
+                    <th scope="col">Description</th>
+                    {% if m.due_date_1 != null and m.due_date_1 != "NULL" %}
+                    <th scope="col">Due_Date_1</th>
+                    <th scope="col">Due Date 1 Remarks</th>
+                    {% endif %}
+                    {% if m.due_date_2 != null and m.due_date_2 != "null"  %}
+                    <th scope="col">Due_Date_2</th>
+                    <th scope="col">Due Date 2 Remarks</th>
+                    {% endif %}
+                    {% if m.due_date_3 != null and m.due_date_3 != "null"  %}
+                    <th scope="col">Due_Date_3</th>
+                    <th scope="col">Due Date 3 Remarks</th>
+                    {% endif %}
+                    {% if m.due_date_4 != null and m.due_date_4 != "null"  %}
+                    <th scope="col">Due_Date_4</th>
+                    <th scope="col">Due Date 4 Remarks</th>
+                    {% endif %}
+                    {% if m.due_date_5 != null and m.due_date_5 != "null"  %}
+                    <th scope="col">Due_Date_5</th>
+                    <th scope="col">Due Date 5 Remarks</th>
+                    {% endif %}
+                </tr>
+                {{ break }}
+                {% endfor %}
+                </thead>
+                <tbody>
+                {% for m in mfind %}
+                <tr>
+                    {% if user.is_superuser %}
+                    <th scope="row">
+                        <a href="{% url 'delete_event' m.pk %}"><button class="btn btn-danger btn-sm">Delete</button></a>
+                        <a href="{% url 'update_event' m.pk %}"><button class="btn btn-warning btn-sm">Update</button></a>
+                    </th>
+                    {% endif %}
+                    <th scope="col">{{m.id}}</th>
+                    <th scope="col">{{m.regulator}}</th>
+                    <th scope="col">{{m.financial_year}}</th>
+                    <th scope="col">{{m.assessment_year}}</th>
+                    <th scope="col">{{m.date_of_entry|date:'Y-m-d'}}</th>
+                    <th scope="col">{{m.form_return}}</th>
+                    <th scope="col">{{m.frequency}}</th>
+                    <th scope="col">{{m.type_of_tax_payer}}</th>
+                    <th scope="col">{{m.actual_due_date|date:'Y-m-d'}}</th>
+                    <th scope="col">{{m.latest_due_date}}</th>
+                    <th scope="col">{{m.Description}}</th>
+                    {% if m.due_date_1 != null and m.due_date_1 != "null" %}
+                    <th scope="col">{{m.due_date_1}}</th>
+                    <th scope="col">{{m.due_date_1_remarks}}</th>
+                    {% endif %}
+                    {% if m.due_date_2 != null  and m.due_date_2 != "null" %}
+                    <th scope="col">{{m.due_date_2}}</th>
+                    <th scope="col">{{m.due_date_2_remarks}}</th>
+                    {% endif %}
+                    {% if m.due_date_3 != null and m.due_date_3 != "null" %}
+                    <th scope="col">{{m.due_date_3}}</th>
+                    <th scope="col">{{m.due_date_3_remarks}}</th>
+                    {% endif %}
+                    {% if m.due_date_4 != null  and m.due_date_4 != "null" %}
+                    <th scope="col">{{m.due_date_4}}</th>
+                    <th scope="col">{{m.due_date_4_remarks}}</th>
+                    {% endif %}
+                    {% if m.due_date_5 != null  and m.due_date_5 != "null" %}
+                    <th scope="col">{{m.due_date_5}}</th>
+                    <th scope="col">{{m.due_date_5_remarks}}</th>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+    {% endif %}
+</body>
+}
+{% endblock %}

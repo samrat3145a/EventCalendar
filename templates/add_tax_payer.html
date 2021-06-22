@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content%}
+
+{% load static %}
+
+<title>Add Type of Tax Payer</title>
+<link href="{% static 'style_main.css' %}" rel="stylesheet">
+
+<body>
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div style="text-align:center;" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+<div class="wrapper">
+    <div class="title">
+        Add Type of Tax Payer
+    </div>
+    <form action="{% url 'add_tax_payer' %}" method="POST">
+        {% csrf_token %}
+        <div class="form">
+            <div class="inputfield">
+                <label>Type of Tax Payer</label>
+                <input type="text" class="input" name="tax_payer">
+            </div>
+            <div class="inputfield">
+                <input type="submit" value="Add" class="btn">
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+{% endblock %}

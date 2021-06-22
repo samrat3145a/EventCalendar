@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+     .container{
+      padding-top: 24px;
+      font-family: 'Montserrat', sans-serif;
+      max-width:1000px;
+      padding:10px 3rem;
+      text-align: -webkit-auto;
+    }
+    h5
+    {
+    text-align:center;
+    }
+</style>
+<div class="tab-content mt-3" id="myTabContent">
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="alert alert-danger p-5">
+                <h4 class="alert-heading">Delete Entry ?</h4>
+                <p>Are you sure you want to delete Candidate Details of {{ object.actual_due_date }}.</p>
+                <button type="submit" class="btn btn-danger btn-block my-1">
+                    Confirm Delete
+                </button>
+                <hr>
+                <p class="mb-0">This action can't be undone</p>
+            </div>
+        </form>
+
+        <a href="{% url 'view_query_event' %}" style="text-decoration: none;">
+            <button class="btn btn-secondary btn-block">
+                Back to search Events
+            </button>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content%}
+
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar - Speed coding, Neat Developer</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'calendar-master/calendar-master/app/bower/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'calendar-master/calendar-master/app/styles/all1.css' %}">
+</head>
+<body onclick="myFunction();" onload="function1(); checkEvent();">
+<div class="container mt-2">
+    {% if messages %}
+    {% for message in messages %}
+    <div style="text-align:center;" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+<div class="calendar disable-selection" id="calendar">
+    <div class="left-side">
+
+            <div class="current-day text-center">
+                <h1 class="calendar-left-side-day"></h1>
+                <div class="calendar-left-side-day-of-week"></div>
+            </div>
+            <div class="current-day-events" hidden>
+                <div>Current Events:</div>
+                <ul class="current-day-events-list"></ul>
+            </div>
+            <div class="add-event-day mt-5" hidden>
+                <input type="text" class="add-event-day-field" placeholder="Create an Event" name="event">
+                <span class="fa fa-plus-circle cursor-pointer add-event-day-field-btn mt-0 mx-0 my-0 "
+                      onclick="funSubmit()" ></span>
+            </div>
+            <div class="container" hidden>
+                <a class="mt-2" href="{% url 'all_event' %}"  id="all_event" style="color:white; background: transparent;visibility:hidden;">
+                    Click Here View All Events
+                </a>
+            </div>
+            <div class="container ml-4">
+                <form action="{% url 'all_event' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="container mt-5">
+                        <input type="text" class="mt-2" id="test" name="date" readonly
+                        style="color:white; background: transparent;border: none;" hidden>
+                        <button class="btn btn-primary" id="btn_event"></button>
+                    </div>
+                </form>
+                <div class="container mt-3">
+                    <a href="{% url 'report' %}"><button class="btn btn-warning">Filtered Search</button></a>
+                </div>
+            </div>
+    </div>
+    <div class="right-side">
+        <div class="text-right calendar-change-year">
+            <div class="calendar-change-year-slider">
+                <span class="fa fa-caret-left cursor-pointer calendar-change-year-slider-prev"></span>
+                <span class="calendar-current-year"></span>
+                <span class="fa fa-caret-right cursor-pointer calendar-change-year-slider-next"></span>
+            </div>
+        </div>
+        <div class="calendar-month-list">
+            <ul class="calendar-month"></ul>
+        </div>
+        <div class="calendar-week-list">
+            <ul class="calendar-week"></ul>
+        </div>
+        <div class="calendar-day-list">
+            <ul class="calendar-days"></ul>
+        </div>
+    </div>
+</div>
+<script async src="{% static 'calendar-master/calendar-master/app/scripts/all.js' %}"></script>
+<script src="{% static 'calendar.js' %}"></script>
+<script>
+    function get_Date()
+    {
+        var z = "{% for i in task_master %}${{ i.latest_due_date }}{% endfor %}";
+        return z;
+    }
+    function get_count()
+    {
+        var n = "{{ count }}";
+        return n;
+    }
+</script
+
+</body>
+</html>
+{% endblock %}

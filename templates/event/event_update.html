@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+     .container{
+      padding-top: 24px;
+      font-family: 'Montserrat', sans-serif;
+      max-width:1000px;
+      padding:10px 3rem;
+      text-align: -webkit-auto;
+    }
+    h5
+    {
+    text-align:center;
+    }
+</style>
+<body onload="f1();">
+<!--    Navs Start     -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb pl-5">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Create New Entry</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'view_query_event' %}">View Entry</a></li>
+    </ol>
+</nav>
+<div class="container mt-2">
+    {% if messages %}
+    {% for message in messages %}
+    <div style="text-align:center;" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+<!--    Navs End     -->
+<div class="main">
+    <!-- Create a Form -->
+    <div class="container">
+
+        <div class="container py-3  mt-5"
+             style="background-color:#2196f3 ; border-radius: 25px 25px 0px 0px; color: white;">
+            <h2 class="pl-5 pt-2">Event: Update</h2>
+        </div>
+
+        <div class="container p-5" style="background-color:#eceff1; border-radius: 0px 0px 25px 25px;">
+
+            <form method="POST" id="form">
+
+                <h5>Entry the data you wish to update.....</h5>
+                <hr>
+                {% csrf_token %}
+                <div class="container">
+                    <div class="mt-2 mb-2">
+                        Due Date 1:{{ form.due_date_1 }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 1 Remarks:{{ form.due_date_1_remarks }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 2:{{ form.due_date_2 }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 2 Remarks:{{ form.due_date_2_remarks }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 3:{{ form.due_date_3 }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 3 Remarks:{{ form.due_date_3_remarks }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 4:{{ form.due_date_4 }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 4 Remarks:{{ form.due_date_4_remarks }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 5:{{ form.due_date_5 }}
+                    </div>
+                    <div class="mt-2 mb-2">
+                        Due Date 5 Remarks:{{ form.due_date_5_remarks }}
+                    </div>
+                </div>
+                    <input type="text" name="latest_due_date" id="latest_due_date" readonly hidden>
+                <div class="row">
+                    <div class="col-md-4">  
+                        <button class="btn btn-warning btn-block mt-3">Update Entry</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-secondary btn-block mt-3">Update Latest Due Date</button>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'view_query_event' %}" class="btn btn-primary btn-block mt-3  my-3" 
+                        style="text-decoration: none;">Back to View Events</a>
+                    </div>
+                </div>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Warning! Changes made here are permanent!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+function f1()
+{
+    var a = "{{ obj.actual_due_date|date:'Y-m-d' }}";
+    var b = "{{ obj.due_date_1 }}";
+    var c = "{{ obj.due_date_2 }}";
+    var d = "{{ obj.due_date_3 }}";
+    var e = "{{ obj.due_date_4 }}";
+    var f = "{{ obj.due_date_5 }}";
+    var d1 = new Date(a);
+    var d2 = new Date(b);
+    var d3 = new Date(c);
+    var d4 = new Date(d);
+    var d5 = new Date(e);
+    var d6 = new Date(f);
+    var dates = [d1, d2, d3, d4, d5, d6];
+    var big=dates[0];
+    for(var i=0;i<5;i++)
+    {
+        if(dates[i]>big)
+            big=dates[i];
+    }
+    var max=a;
+    if(big==d1)
+        max=a;
+    else if(big==d2)
+        max=b;
+    else if(big==d3)
+        max=c;
+    else if(big==d4)
+        max=d;
+    else if(big==d5)
+        max=e;
+    else if(big==d6)
+        max=f;
+    document.getElementById('latest_due_date').value=max;
+}
+</script>
+
+{% endblock %}
